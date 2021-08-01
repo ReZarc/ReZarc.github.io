@@ -176,231 +176,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/31/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Reza Kung">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Rezarc's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/31/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-31 23:38:35" itemprop="dateCreated datePublished" datetime="2021-07-31T23:38:35+08:00">2021-07-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-01 00:12:29" itemprop="dateModified" datetime="2021-08-01T00:12:29+08:00">2021-08-01</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>关于图的几个概念定义：</p>
-<ul>
-<li><strong>连通图</strong>：在无向图中，若任意两个顶点vivi与vjvj都有路径相通，则称该无向图为连通图。</li>
-<li><strong>强连通图</strong>：在有向图中，若任意两个顶点vivi与vjvj都有路径相通，则称该有向图为强连通图。</li>
-<li><strong>连通网</strong>：在连通图中，若图的边具有一定的意义，每一条边都对应着一个数，称为权；权代表着连接连个顶点的代价，称这种连通图叫做连通网。</li>
-<li><strong>生成树</strong>：一个连通图的生成树是指一个连通子图，它含有图中全部n个顶点，但只有足以构成一棵树的n-1条边。一颗有n个顶点的生成树有且仅有n-1条边，如果生成树中再添加一条边，则必定成环。</li>
-<li><strong>最小生成树</strong>：在连通网的所有生成树中，所有边的代价和最小的生成树，称为最小生成树。 </li>
-</ul>
-<p><img src="https://img-blog.csdn.net/20160714130435508"></p>
-<p>下面介绍两种求最小生成树算法</p>
-<h2 id="1-Kruskal算法"><a href="#1-Kruskal算法" class="headerlink" title="1.Kruskal算法"></a><strong>1.Kruskal算法</strong></h2><p>此算法可以称为“加边法”，初始最小生成树边数为0，每迭代一次就选择一条满足条件的最小代价边，加入到最小生成树的边集合里。 </p>
-<ol>
-<li>把图中的所有边按代价从小到大排序； </li>
-<li>把图中的n个顶点看成独立的n棵树组成的森林； </li>
-<li>按权值从小到大选择边，所选的边连接的两个顶点u_i , v_i 应属于两颗不同的树，则成为最小生成树的一条边，并将这两颗树合并作为一颗树。 </li>
-<li>重复(3),直到所有顶点都在一颗树内或者有n-1条边为止。</li>
-</ol>
-<p><img src="https://img-blog.csdn.net/20160714144315409"></p>
-<p>模板：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> mem(a,b) memset(a,b,sizeof(a))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n, m, p[N];		<span class="comment">//并查集找爹</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> a, b, w;</span><br><span class="line">&#125;e[M];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(p[x] != x) p[x] = <span class="built_in">find</span>(p[x]);</span><br><span class="line">    <span class="keyword">return</span> p[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(node a,node b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a.w &lt; b.w;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kruskal</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cnt, ans;</span><br><span class="line">    cnt = ans = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">sort</span>(e,e + m,cmp);		<span class="comment">//操作1</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= n;i ++) p[i] = i;		<span class="comment">//操作2</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; m;i ++)&#123;</span><br><span class="line">        <span class="keyword">int</span> a = e[i].a, b = e[i].b, w = e[i].w;		</span><br><span class="line">        a = <span class="built_in">find</span>(a), b = <span class="built_in">find</span>(b);</span><br><span class="line">        <span class="keyword">if</span>(a != b)&#123;				<span class="comment">//操作3</span></span><br><span class="line">            p[a] = b;</span><br><span class="line">            ans += w;</span><br><span class="line">            cnt ++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(cnt &lt; n - <span class="number">1</span>) <span class="keyword">return</span> INF;		<span class="comment">//最小生成树不存在</span></span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-Prim算法"><a href="#2-Prim算法" class="headerlink" title="2.Prim算法"></a><strong>2.Prim算法</strong></h2><p>此算法可以称为“加点法”，每次迭代选择代价最小的边对应的点，加入到最小生成树中。算法从某一个顶点s开始，逐渐长大覆盖整个连通网的所有顶点。</p>
-<ol>
-<li>图的所有顶点集合为VV；初始令集合u = {s}, v = V − u;</li>
-<li>在两个集合u,v能够组成的边中，选择一条代价最小的边(u_0,v_0)，加入到最小生成树中，并把v_0并入到集合u中。</li>
-<li>重复上述步骤，直到最小生成树有n-1条边或者n个顶点为止。</li>
-</ol>
-<p>模板：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> mem(a,b) memset(a,b,sizeof(a))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">505</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n, m, g[N][N], dis[N], vis[N];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">prim</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">mem</span>(dis,INF);</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; n;i ++)&#123;</span><br><span class="line">        <span class="keyword">int</span> t = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>;j &lt;= n;j ++)</span><br><span class="line">            <span class="keyword">if</span>(!vis[j] &amp;&amp; (t == <span class="number">-1</span> || dis[t] &gt; dis[j])) </span><br><span class="line">                t = j;</span><br><span class="line">        <span class="keyword">if</span>(i &amp;&amp; dis[t] == INF) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">if</span>(i) ans += dis[t];</span><br><span class="line">        vis[t] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n;j ++) dis[j] = <span class="built_in">min</span>(dis[j], g[t][j]); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://img-blog.csdn.net/20160714161107576"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/31/%E6%9C%80%E7%9F%AD%E8%B7%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Reza Kung">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Rezarc's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/31/%E6%9C%80%E7%9F%AD%E8%B7%AF/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-31 23:09:53" itemprop="dateCreated datePublished" datetime="2021-07-31T23:09:53+08:00">2021-07-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-01 00:00:03" itemprop="dateModified" datetime="2021-08-01T00:00:03+08:00">2021-08-01</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>/<strong>先看懂再刷题。主要是为了提高效率——看都看了，甚至懂了，不刷点题？？（刷题并不是目的）</strong>/</p>
-<h2 id="最短路算法框架"><a href="#最短路算法框架" class="headerlink" title="最短路算法框架"></a>最短路算法框架</h2><p>最短路有五种算法，分别适用不同的情况。</p>
-<p><img src="https://img-blog.csdnimg.cn/5944ee1b176a4734a9ff7519d73cf4f5.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01fQV9OX0lfQV9D,size_16,color_FFFFFF,t_70#pic_center"></p>
-<p><strong>单源最短路：</strong> 求一个点到其他点的最短路<br><strong>多源最短路：</strong> 求任意两个点的最短路</p>
-<p>稠密图用邻接矩阵存，稀疏图用邻接表存储。</p>
-<p><strong>稠密图：</strong> m 和 n2 一个级别<br><strong>稀疏图：</strong> m 和 n 一个级别</p>
-<h2 id="一、单源最短路"><a href="#一、单源最短路" class="headerlink" title="一、单源最短路"></a>一、单源最短路</h2><h3 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h3><p><strong>Dijkstra算法是通过 n 次循环来确定 n 个点到起点的最短路的。</strong></p>
-<p>首先找到一个没有确定最短路且距离起点最近的点，并通过这个点将其他点的最短距离进行更新。每做一次这个步骤，都能确定一个点的最短路，所以需要重复此步骤 n 次，找出 n 个点的最短路。</p>
-<p>1.操作（与prim很相似）：dis数组初始化为inf，dis[s]为0（以下假设s为1）。然后每次循环找到没有标记而且dis值最小的点对它邻接的点进行松弛操作，同时标记该点（证明该点不可能再减小：它已经是能到达的点中dis最小的了，如果想让其他点对它松弛操作之后还能减小，那是不可能的！）每次发现松弛操作：如果dis[u]+w&lt;dis[v]，dis[v]=dis[u]+w。</p>
-<p>2.注意：<strong>不能处理带负权的图</strong>。</p>
-<p>朴素Dijkstra时间，空间复杂度**均为O(n^2)<strong>，</strong>使用邻接表空间复杂度可降到O(m)**。</p>
-<h5 id="朴素模板："><a href="#朴素模板：" class="headerlink" title="朴素模板："></a>朴素模板：</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INF = 0x3f3f3f3f;</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1005</span>;</span><br><span class="line"><span class="keyword">int</span> dis[N], vis[N];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> s)</span></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dis,INF,<span class="built_in"><span class="keyword">sizeof</span></span>(dis));	<span class="comment">//初始化距离为INF</span></span><br><span class="line">    dis[s] = <span class="number">0</span>; 			<span class="comment">//起点与起点的距离当然为0。</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; n;i ++)&#123;		<span class="comment">//遍历</span></span><br><span class="line">        <span class="keyword">int</span> t = <span class="number">-1</span>;					</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>;j &lt;= n;j ++)</span><br><span class="line">            <span class="keyword">if</span>(!vis[j] &amp;&amp; (t == <span class="number">-1</span> || dis[t] &gt; dis[j]))		<span class="comment">//找到未走过且距离最小的点</span></span><br><span class="line">                t = j;</span><br><span class="line">        vis[t] = <span class="number">1</span>;					<span class="comment">//标记走过	</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>;j &lt;= n;j ++) dis[j] = <span class="built_in">min</span>(dis[j],dis[t] + g[t][j]);		<span class="comment">//更新距离</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(dis[n] == INF) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> dis[n];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://img-blog.csdnimg.cn/20200410181741148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dteTAyMTdf,size_16,color_FFFFFF,t_70" alt="路径更新"></p>
-<p>刚开始，t = 1，因为结点 1 距离起点距离为0，是距离最小的，我们拿1这个结点来更新其他结点的最短路，结点 2 的最短路可以更新为 1，因为 t 到起点的距离为 0，而1——&gt;2的距离为 1，0+1=1，同理，结点 3 的最短距离更新为 4 。</p>
-<p>这第一个结点的最短距离我们已经确定了，此时，再找下一个 t ，很明显，t = 2，我们再来用 2 这个结点来更新其他点的最短距离，因为 dist[2]+g[2][3] = 1 + 2，很明显 1 + 2 &lt; 4，我们可以把结点 3 的最短距离更新成 3， 对应代码里的 dist[j] = min(dist[j],dist[t]+g[t][j]) 。</p>
-<p>代码里每次更新都是循环1~n个结点，其实已经确定最短路的点是不用更新的了，还有 t 这个点可能与 j 这个点间是没有路的，也是不用更新的，不过这不影响答案，但你也可以更新时加个 if(!st[j] &amp;&amp; g[t][j]!=0x3f3f3f3f)。</p>
-<p>堆优化Dijkstra时间复杂度大概在**O(mlogm)**，还是很可观的。</p>
-<h5 id="堆优化模板："><a href="#堆优化模板：" class="headerlink" title="堆优化模板："></a>堆优化模板：</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> fi first</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> se second</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PII pair<span class="meta-string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> mem(a,b) memset(a,b,sizeof(a))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">2e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> dis[N], vis[N];</span><br><span class="line"><span class="keyword">int</span> h[N], e[N], w[N], ne[N], idx;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span></span>&#123;e[idx] = b; w[idx] = c; ne[idx] = h[a]; h[a] = idx ++;&#125;		<span class="comment">//邻接表建边</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> s)</span></span>&#123;</span><br><span class="line">    <span class="built_in">mem</span>(dis,INF); dis[s] = <span class="number">0</span>;</span><br><span class="line">    priority_queue&lt;PII,vector&lt;PII&gt;, greater&lt;PII&gt;&gt; q;		<span class="comment">//建立小根堆</span></span><br><span class="line">    q.<span class="built_in">push</span>(&#123;<span class="number">0</span>,s&#125;);		<span class="comment">//存入起点</span></span><br><span class="line">    <span class="keyword">while</span>(q.<span class="built_in">size</span>())&#123;</span><br><span class="line">        <span class="keyword">auto</span> t = q.<span class="built_in">top</span>(); q.<span class="built_in">pop</span>();	<span class="comment">//建立一个pair类型的临时变量</span></span><br><span class="line">        <span class="keyword">int</span> v = t.se, d = t.fi;		<span class="comment">//v 为当前点，t 为当前点的dis[v]</span></span><br><span class="line">        <span class="keyword">if</span>(vis[v]) <span class="keyword">continue</span>;		<span class="comment">//如果遍历过就continue</span></span><br><span class="line">        vis[v] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = h[v]; i != <span class="number">-1</span>; i = ne[i])&#123;		<span class="comment">//遍历找距离最短的边</span></span><br><span class="line">            <span class="keyword">int</span> j = e[i];</span><br><span class="line">            <span class="keyword">if</span>(dis[j] &gt; w[i] + d)					<span class="comment">//找到边</span></span><br><span class="line">                dis[j] = w[i] + d, q.<span class="built_in">push</span>(&#123;dis[j],j&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(dis[n] == INF) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> dis[n]; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="Bellman-Ford"><a href="#Bellman-Ford" class="headerlink" title="Bellman - Ford"></a>Bellman - Ford</h3><p>Bellman-Ford算法是通过<strong>循环 n 次，每次循环都遍历每条边</strong>，进而更新结点的距离，每一次的循环至少可以确定一个点的最短路，所以循环 n次，就可以求出 n 个点的最短路。（但其实Bellman - Ford能做的SPFA基本都能做。</p>
-<h3 id="SPFA"><a href="#SPFA" class="headerlink" title="SPFA"></a>SPFA</h3><p>1.介绍：对bellman_ford算法的一个队列优化。可用于求单源最短路。（可以处理求含负权的最短路，但是不能处理含负环的最短路）可判正负环。</p>
-<p>2.操作：类似于bfs，每次检查可以更新同时没在队列中的点放进去继续等待更新，等一个都不能更新就自动出来了，操作也简单。。</p>
-<p>3.时间复杂度：稀疏图中O(km)，k为常数。稠密图中退化到O(nm)</p>
-<p>4.模板：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> fi first</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> se second</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PII pair<span class="meta-string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> mem(a,b) memset(a,b,sizeof(a))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">int</span> n, m, dis[N], vis[N];</span><br><span class="line"><span class="keyword">int</span> h[N], e[N], w[N], ne[N], idx;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b,<span class="keyword">int</span> c)</span></span>&#123;e[idx] = b; w[idx] = c; ne[idx] = h[a]; h[a] = idx ++;&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">spfa</span><span class="params">(<span class="keyword">int</span> s)</span></span>&#123;</span><br><span class="line">    <span class="built_in">mem</span>(dis,INF);		</span><br><span class="line">    queue&lt;PII&gt;q;	</span><br><span class="line">    dis[s] = <span class="number">0</span>;</span><br><span class="line">    q.<span class="built_in">push</span>(&#123;<span class="number">0</span>,s&#125;);</span><br><span class="line">    <span class="keyword">while</span>(q.<span class="built_in">size</span>())&#123;</span><br><span class="line">        PII p = q.<span class="built_in">front</span>(); q.<span class="built_in">pop</span>();			</span><br><span class="line">        <span class="keyword">int</span> v = p.se;</span><br><span class="line">        vis[v] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = h[v]; i != <span class="number">-1</span>; i = ne[i])&#123;</span><br><span class="line">            <span class="keyword">int</span> j = e[i];</span><br><span class="line">            <span class="keyword">if</span>(dis[j] &gt; dis[v] + w[i])&#123;</span><br><span class="line">                dis[j] = w[i] + dis[v];</span><br><span class="line">                <span class="keyword">if</span>(!vis[j])</span><br><span class="line">                    vis[j] = <span class="number">1</span>, q.<span class="built_in">push</span>(&#123;dis[j],j&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(dis[n] == INF) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> dis[n];</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="二、多源最短路"><a href="#二、多源最短路" class="headerlink" title="二、多源最短路"></a>二、多源最短路</h2><p>1.介绍：（可以处理求含负权的最短路，但是不能处理含负环的最短路）</p>
-<p>2.挺多拓展的：传递闭包，最长/短路，最小/“大”瓶颈路，判正负环。最小环之类的</p>
-<p>模板极简，时间复杂度极高。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= n; k++)</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++) g[i][j] = <span class="built_in">min</span>(g[i][j], g[i][k] + g[k][j]);</span><br></pre></td></tr></table></figure>
-
-<h2 id="三、最短路计数"><a href="#三、最短路计数" class="headerlink" title="三、最短路计数"></a>三、最短路计数</h2><p>1.概念：字面意思</p>
-<p>2.操作：与最短路径树的操作几乎一样，只需要做一些改动：pre初始化为0；pre[s]=1；然后每次遇到dis[u]==dis[v]的时候pre[v]+=pre[u]；松弛操作的时候pre[v]=pre[u]就ok了。</p>
-<p>对比最短路径树：pre初始化为0；pre[s]=1；然后每次遇到dis[u]==dis[v]的时候pre[v]++；松弛操作的时候pre[v]=1就ok了。</p>
-<p>模板：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) dis[i] = inf, vis[i] = <span class="number">0</span>, pre[i] = <span class="number">0</span>;</span><br><span class="line">    dis[<span class="number">1</span>] = <span class="number">0</span>, pre[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    q.<span class="built_in">push</span>(<span class="built_in">pii</span>(<span class="number">0</span>, <span class="number">1</span>));  <span class="comment">//小顶堆</span></span><br><span class="line">    <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">        pii now = q.<span class="built_in">top</span>();</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">int</span> d = now.fi, i = now.se;  <span class="comment">//距离和下标</span></span><br><span class="line">        <span class="keyword">if</span> (vis[i])</span><br><span class="line">            <span class="keyword">continue</span>;  <span class="comment">//之前标记过的点仍然在优先队列中取不出来很正常，到时候取出来</span></span><br><span class="line">        vis[i] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> j : g[i]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (vis[j.to]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="comment">//松弛操作</span></span><br><span class="line">            <span class="keyword">if</span> (d + j.w == dis[j.to]) pre[j.to] += pre[i];  <span class="comment">//操作一第一步</span></span><br><span class="line">            <span class="keyword">if</span> (d + j.w &lt; dis[j.to]) &#123;</span><br><span class="line">                dis[j.to] = d + j.w;</span><br><span class="line">                q.<span class="built_in">push</span>(<span class="built_in">pii</span>(dis[j.to], j.to)),</span><br><span class="line">                    pre[j.to] = pre[i];  <span class="comment">//操作一第二步</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// dis[i]==inf，或者说pre[n]=0时表示无路径</span></span><br><span class="line">    (dis[n] == inf) ? <span class="built_in">puts</span>(<span class="string">&quot;No answer&quot;</span>)</span><br><span class="line">                    : (<span class="built_in">print</span>(dis[n], <span class="string">&#x27; &#x27;</span>), <span class="built_in">print</span>(pre[n], <span class="string">&#x27;\n&#x27;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/03/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -650,7 +425,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -691,12 +466,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">9k</span>
+    <span title="站点总字数">3k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8 分钟</span>
+    <span title="站点阅读时长">3 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
