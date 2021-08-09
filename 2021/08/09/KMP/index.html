@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="KMP算法是一种字符串匹配算法，可以在 O(n+m) 的时间复杂度内实现两个字符串的匹配。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KMP入门">
+<meta property="og:url" content="http://example.com/2021/08/09/KMP/index.html">
+<meta property="og:site_name" content="Rezarc&#39;s Blog">
+<meta property="og:description" content="KMP算法是一种字符串匹配算法，可以在 O(n+m) 的时间复杂度内实现两个字符串的匹配。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2ed16b18db7441dab133b98ac223d452.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01fQV9OX0lfQV9D,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-7dc61b0836af61e302d9474eeeecfe83_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-372dc6c567ba53a1e4559fdb0cb6b206_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-67dd66b86323d3d08f976589cf712a1a_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-49c7168b5184cc1744459f325e426a4a_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-d6c6d433813595dce5aad08b40dc0b72_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-6d6a40331cd9e44bfccd27ac5a764618_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-ce1d46a1e3603b07a13789b6ece6022f_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-c5ff4faaab9c3e13690deb86d8d17d71_720w.jpg?source=1940ef5c">
+<meta property="article:published_time" content="2021-08-09T00:20:23.000Z">
+<meta property="article:modified_time" content="2021-08-09T02:57:40.812Z">
+<meta property="article:author" content="Reza Kung">
+<meta property="article:tag" content="字符串">
+<meta property="article:tag" content="基础算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2ed16b18db7441dab133b98ac223d452.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01fQV9OX0lfQV9D,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://example.com/2021/08/09/KMP/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>KMP入门 | Rezarc's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Rezarc's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">HELLO WORLD</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="link fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/09/KMP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Reza Kung">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rezarc's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          KMP入门
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-09 08:20:23 / 修改时间：10:57:40" itemprop="dateCreated datePublished" datetime="2021-08-09T08:20:23+08:00">2021-08-09</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>KMP算法是一种<strong>字符串匹配</strong>算法，可以在 O(n+m) 的时间复杂度内实现两个字符串的匹配。</p>
+<span id="more"></span>
+
+<h2 id="字符串匹配问题"><a href="#字符串匹配问题" class="headerlink" title="字符串匹配问题"></a>字符串匹配问题</h2><p>所谓字符串匹配， 就是假设有两个字符串 s 和 p，问字符串 p 是否是串 s 的子串。</p>
+<p><img src="https://img-blog.csdnimg.cn/2ed16b18db7441dab133b98ac223d452.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01fQV9OX0lfQV9D,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>这种问题用暴力的做法也很好求， 只要从主串 s 的开头开始逐字符枚举就行了，之后我们只需要比较 i 指针和 j 指针指向的字符是否一致。如果一致就向后移动， 不然就让子串整体右移一位。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> s[<span class="number">1005</span>], p[<span class="number">105</span>];	<span class="comment">//s 是主串， p 是模式串（匹配的子串）</span></span><br><span class="line">cin &gt;&gt; s &gt;&gt; p;</span><br><span class="line"><span class="keyword">int</span> i, j;</span><br><span class="line">i = j = <span class="number">1</span>;	<span class="comment">//初始化 i j</span></span><br><span class="line"><span class="keyword">int</span> n = <span class="built_in">strlen</span>(s), m = <span class="built_in">strlen</span>(p);</span><br><span class="line"><span class="keyword">while</span>(i &lt;= n &amp;&amp; j &lt;= m)&#123;</span><br><span class="line">    <span class="keyword">if</span>(s[i] == p[j]) i ++, j ++;	<span class="comment">//如果相等就向后移动</span></span><br><span class="line">    <span class="keyword">else</span> i = i - j + <span class="number">2</span>, j = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line">cout &lt;&lt; (j != m + <span class="number">1</span> ? <span class="number">-1</span> : i - j + <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>上述方法是没有问题的，但时间复杂度是O(n * m)，非常高。</p>
+<p><del>如果你想生懒法的话可以直接用 stl 的 find 函数，这样虽然也可以但是建议还是多学点算法。</del></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">string s, p;</span><br><span class="line">cin &gt;&gt; s &gt;&gt; p;</span><br><span class="line"><span class="keyword">int</span> pos = s.<span class="built_in">find</span>(p);</span><br><span class="line"><span class="keyword">if</span>(pos != string::npos) cout &lt;&lt; pos;</span><br><span class="line"><span class="keyword">else</span> <span class="built_in">puts</span>(<span class="string">&quot;-1&quot;</span>);</span><br><span class="line"><span class="comment">//因为怕你们看懂就不学kmp了 所以不写注释了</span></span><br></pre></td></tr></table></figure>
+
+<p><del>//上面的代码片忽略掉就可以了</del></p>
+<p>在上述方法中，如果从 S[i] 开始的那一趟比较失败了，算法会直接开始尝试从 S[i + 1] 开始比较，我们可以看出，如果 S[i] 与 P 的匹配是在第 r 个位置失败的，那么从 S[i] 开始的 (r-1) 个连续字符，一定与 P 的前 (r-1) 个字符一模一样。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-7dc61b0836af61e302d9474eeeecfe83_720w.jpg?source=1940ef5c"></p>
+<p>掌握了这些信息后，我们就要根据这些信息推断出，哪些匹配是毫无可能的，并跳过这些匹配。</p>
+<p>那么，哪些字符串比较是不可能成功的？来看一个例子。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-372dc6c567ba53a1e4559fdb0cb6b206_720w.jpg?source=1940ef5c"></p>
+<p>模式串 P = “abcabd” 和主串从S[0]开始匹配时，在 P[5] 处失配。既然是在 P[5] 失配的，那么说明 S[0<del>5] 等于 P[0</del>5]，即”abcab”. 现在我们来考虑：从 S[1]、S[2]、S[3] 开始的匹配尝试，有没有可能成功？　　</p>
+<p>从 S[1] 开始肯定没办法成功，因为 S[1] = P[1] = ‘b’，和 P[0] 并不相等。从 S[2] 开始也是没戏的，因为 S[2] = P[2] = ‘c’，并不等于P[0]. 但是从 S[3] 开始是有可能成功的（至少按照目前的信息， 我们推不出矛盾的地方。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-67dd66b86323d3d08f976589cf712a1a_720w.jpg?source=1940ef5c"></p>
+<p>因此我们最初的找字符串问题的目标开始转向跳过不可能成功的匹配位置， 由此我们引入一个新概念——Next数组。</p>
+<h2 id="next-数组"><a href="#next-数组" class="headerlink" title="next 数组"></a>next 数组</h2><p>next数组是相对于模式串（子串）而言的，<strong>next数组是模式串最长相同的前后缀长度，而且长度必须小于本身，因为等于自己没有意义。</strong>。next[i] 表示p[0] ~ p[i] 这一个 p 的子串前 k 个字符恰好等于后 k 个字符的最大的数。</p>
+<p>比如模式串p = “abcabd”;</p>
+<p>i = 0 时，因为子串只有 “a” 所以             长度为0 –&gt; next[0] = 0;</p>
+<p>i = 1 时，子串”ab”没有最长相同前后缀 长度为0 –&gt; next[1] = 0;</p>
+<p>i = 2 时，”abc” 没有最长相同前后缀      长度为0 –&gt; next[2] = 0;</p>
+<p>i = 3 时，”abca” 最长相同前后缀为”a”  长度为1 –&gt; next[3] = 1;</p>
+<p>i = 4 时，”abcab”最长相同前后缀为”ab”长度为2–&gt; next[4] = 2;</p>
+<p>i = 5 时，”abcabd”没有最长相同前后缀 长度为0–&gt; next[5] = 0;</p>
+<p><img src="https://pic1.zhimg.com/80/v2-49c7168b5184cc1744459f325e426a4a_720w.jpg?source=1940ef5c" alt="i = 4时的情况"></p>
+<p>上图给出了一个例子。P[0<del>4]=”abcab”时，next[4]=2，这是因为P[0</del>4] 这个子串是”abcab”，前两个字符与后两个字符相等，因此next[4]取2。 而next[5]=0，是因为”abcabd”找不到前缀与后缀相同的地方，因此只能取0。</p>
+<p>由此，next数组的作用就显现出来了，主要就是每次失配之后跳过不可能匹配成功的位置，但是我们该如何移位呢？</p>
+<p>我们拿s = “ababaabaabac…”, p = “abaabac”来看一下</p>
+<p><img src="https://pic1.zhimg.com/80/v2-d6c6d433813595dce5aad08b40dc0b72_720w.jpg?source=1940ef5c"></p>
+<p>i = j = 0 时开始匹配，在i = j = 3 失配之后，我们直接将模式串右移了两位，让s[2] = p[0] 继续匹配，最后在i = 8, j = 6时失配，再让模式串右移3位，此后继续匹配直到成功。</p>
+<p>即：p[3] 失配后，把 p[next[3-1]] (next[2] = 1) 也就是 P[1] 对准了主串刚刚失配的那一位； P[6] 失配后，把 P[next[6-1]] (next[5] = 3) 也就是P[3]对准了主串刚刚失配的那一位。</p>
+<p><strong>如图中蓝色箭头所示，旧的后缀要与新的前缀一致</strong>（如果不一致，那就肯定没法匹配上了）</p>
+<p>那么，如何来求next数组呢？</p>
+<h3 id="求next数组"><a href="#求next数组" class="headerlink" title="求next数组"></a>求next数组</h3><p>首先说一句：快速构建next数组，是KMP算法的精髓所在，核心思想是“<strong>P自己与自己做匹配</strong>”。<br>　　为什么这样说呢？回顾next数组的完整定义：</p>
+<ul>
+<li>定义 “k-前缀” 为一个字符串的前 k 个字符； “k-后缀” 为一个字符串的后 k 个字符。k 必须小于字符串长度。 </li>
+<li>next[x] 定义为： P[0]~P[x] 这一段字符串，使得<strong>k-前缀恰等于k-后缀</strong>的最大的k.</li>
+</ul>
+<p>　　这个定义中，不知不觉地就包含了一个匹配——前缀和后缀相等。接下来，我们考虑采用递推的方式求出next数组。如果next[0], next[1], … next[x-1]均已知，那么如何求出 next[x] 呢？</p>
+<p>​        来分情况讨论。首先，已经知道了 next[x-1]（以下记为now），如果 P[x] 与 P[now] 一样，那最长相等前后缀的长度就可以扩展一位，很明显 next[x] = now + 1. 图示如下。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-6d6a40331cd9e44bfccd27ac5a764618_720w.jpg?source=1940ef5c"></p>
+<p>p[x] == p[now] 的情况解决了，那么p[x] != p[now]的情况怎么办呢？</p>
+<p><img src="https://pic2.zhimg.com/80/v2-ce1d46a1e3603b07a13789b6ece6022f_720w.jpg?source=1940ef5c"></p>
+<p>如图。长度为 now 的子串 A 和子串 B 是 P[0]<del>P[x-1] 中最长的公共前后缀。可惜 A 右边的字符和 B 右边的那个字符不相等，next[x]不能改成 now+1 了。因此，我们应该<strong>缩短这个now</strong>，把它改成小一点的值，再来试试 P[x] 是否等于 P[now].<br>　　now该缩小到多少呢？显然，我们不想让now缩小太多。因此我们决定，在保持“P[0]</del>P[x-1]的now-前缀仍然等于now-后缀”的前提下，让这个新的now尽可能大一点。 P[0]~P[x-1] 的公共前后缀，前缀一定落在串A里面、后缀一定落在串B里面。换句话讲：接下来now应该改成：使得 <strong>A的k-前缀</strong>等于<strong>B的k-后缀</strong> 的最大的k.<br>　　我们应该已经注意到了一个非常强的性质——<strong>串A和串B是相同的</strong>！B的后缀等于A的后缀！因此，使得A的k-前缀等于B的k-后缀的最大的k，其实就是串A的最长公共前后缀的长度 —— next[now-1]！</p>
+<p><img src="https://pic2.zhimg.com/80/v2-c5ff4faaab9c3e13690deb86d8d17d71_720w.jpg?source=1940ef5c"></p>
+<p>所以现在求next数组的方法其实已经很明了了。</p>
+<p>p[now] == p[x] 的情况下，next[x] = now + 1;</p>
+<p>p[now] != p[x] 的情况下， now = next[now];</p>
+<p>上代码。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">string p;</span><br><span class="line"><span class="keyword">int</span> ne[N], m;</span><br><span class="line"><span class="comment">//这里我们把字符串从 p[1] 开始读入</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get_next</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ne[<span class="number">1</span>] = <span class="number">0</span>;			<span class="comment">//ne[1] 必定是0</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>, j = <span class="number">0</span>; i &lt;= m; i ++ )&#123; 	<span class="comment">//开始匹配 i 代表 x ,j 代表 now</span></span><br><span class="line">        <span class="keyword">while</span> (j &amp;&amp; p[i] != p[j + <span class="number">1</span>]) j = ne[j];	<span class="comment">//j != 0 且p[i] != p[j + 1]</span></span><br><span class="line">        <span class="keyword">if</span> (p[i] == p[j + <span class="number">1</span>]) j ++ ;</span><br><span class="line">        ne[i] = j;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>（目前未完成，先挂上防止挂不上了）</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"># 字符串</a>
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/" rel="tag"># 基础算法</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/15/%E6%9C%80%E7%9F%AD%E8%B7%AF/" rel="prev" title="最短路">
+      <i class="fa fa-chevron-left"></i> 最短路
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">字符串匹配问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#next-%E6%95%B0%E7%BB%84"><span class="nav-number">2.</span> <span class="nav-text">next 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B1%82next%E6%95%B0%E7%BB%84"><span class="nav-number">2.1.</span> <span class="nav-text">求next数组</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Reza Kung</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Reza Kung</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">12k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">11 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+</body>
+
+    <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+    <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+    <script type="text/javascript" src="/js/src/fireworks.js"></script>
+    
+
+</html>
