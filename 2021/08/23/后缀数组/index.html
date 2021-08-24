@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20160205125603928">
 <meta property="og:image" content="https://img-blog.csdn.net/20160205125636006">
 <meta property="article:published_time" content="2021-08-23T12:18:32.000Z">
-<meta property="article:modified_time" content="2021-08-24T00:50:17.265Z">
+<meta property="article:modified_time" content="2021-08-24T01:20:36.146Z">
 <meta property="article:author" content="Reza Kung">
 <meta property="article:tag" content="字符串">
 <meta property="article:tag" content="基础算法">
@@ -217,7 +217,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-24 08:50:17" itemprop="dateModified" datetime="2021-08-24T08:50:17+08:00">2021-08-24</time>
+                <time title="修改时间：2021-08-24 09:20:36" itemprop="dateModified" datetime="2021-08-24T09:20:36+08:00">2021-08-24</time>
               </span>
 
           <br>
@@ -226,14 +226,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
+              <span>4.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -276,7 +276,7 @@
 <h1 id="构造最长公共前缀——Height"><a href="#构造最长公共前缀——Height" class="headerlink" title="构造最长公共前缀——Height"></a>构造最长公共前缀——Height</h1><p>构造最长公共前缀——Height<br>同样先是定义一些变量<br>Heigth[i] : 表示Suffix[SA[i]]和Suffix[SA[i - 1]]的最长公共前缀，也就是排名相邻的两个后缀的最长公共前缀<br>H[i] : 等于Height[Rank[i]]，也就是后缀Suffix[i]和它前一名的后缀的最长公共前缀<br>而两个排名不相邻的最长公共前缀定义为排名在它们之间的Height的最小值。<br>跟上面一样，先形象地理解一下：</p>
 <p><img src="https://img-blog.csdn.net/20160205125636006"></p>
 <p>如果一个一个数按SA中的顺序比较的话复杂度是O(N<sup>2</sup>)级别的，想要快速的得到Height就需要用到一个关于H数组的性质。<br>H[i] ≥ H[i - 1] - 1!<br>如果上面这个性质是对的，那我们可以按照H[1]、H[2]……H[Len]的顺序进行计算，那么复杂度就降为O(N)了！<br>让我们尝试一下证明这个性质 : 设Suffix[k]是排在Suffix[i - 1]前一名的后缀，则它们的最长公共前缀是H[i - 1]。都去掉第一个字符，就变成Suffix[k + 1]和Suffix[i]。如果H[i - 1] = 0或1,那么H[i] ≥ 0显然成立。否则，H[i] ≥ H[i - 1] - 1(去掉了原来的第一个,其他前缀一样相等)，所以Suffix[i]和在它前一名的后缀的最长公共前缀至少是H[i - 1] - 1。<br>仔细想想还是比较好理解的。H求出来，那Height就相应的求出来了，这样结合SA，Rank和Height我们就可以做很多关于字符串的题了！</p>
-
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">int n, m;</span><br><span class="line">char s[N];</span><br><span class="line">int sa[N], x[N], y[N], c[N], rk[N], height[N];</span><br><span class="line">//x--存储第一关键字</span><br><span class="line">//y--存储第二关键字</span><br><span class="line">//c--存储每个数值的数目</span><br><span class="line">//rk--rk[i]表示从i开始的后缀的排名</span><br><span class="line">//sa--sa[i]表示排名为i的后缀的起始下标</span><br><span class="line">//h--h[i]表示排名为i的后缀和排名为i - 1的后缀的最长前缀 </span><br><span class="line">void get_sa()&#123;</span><br><span class="line">    for(int i = 1;i &lt;= n;i ++) c[x[i] = s[i]] ++;</span><br><span class="line">    for(int i = 2;i &lt;= m;i ++) c[i] += c[i - 1];</span><br><span class="line">    for(int i = n; i; i --) sa[c[x[i]] --] = i;</span><br><span class="line">    for(int k = 1;k &lt;= n;k &lt;&lt;= 1) &#123;</span><br><span class="line">        int num = 0;</span><br><span class="line">        //先按照第二关键字排序，下标从i开始的后缀的第二关键字为从i+k开始的第一关键字 </span><br><span class="line">        //先将无第二关键字的后缀排先名，此时y[i]表示按照第二关键字排名为i的起始下标 </span><br><span class="line">        for(int i = n - k + 1;i &lt;= n;i ++) y[ ++ num] = i;</span><br><span class="line">        for(int i = 1;i &lt;= n;i ++)</span><br><span class="line">            //上一层循环中按照第一关键字的排名的下标已经存在sa数组中</span><br><span class="line">            //按从小到大顺序枚举sa数组可保证按照第一关键字从小到大</span><br><span class="line">            //所有起始下标超过k才存在第二关键字</span><br><span class="line">            //将所有存在第二关键字的后缀存储在y数组中，此时是按i + k的第一关键字，下标要-k </span><br><span class="line">            if(sa[i] &gt; k)</span><br><span class="line">                y[++ num] = sa[i] - k;</span><br><span class="line">        for(int i = 1;i &lt;= m;i ++) c[i] = 0;            //将计数数组清空</span><br><span class="line">        for(int i = 1;i &lt;= n;i ++) c[x[i]] ++;</span><br><span class="line">        for(int i = 2;i &lt;= m;i ++) c[i] += c[i - 1];</span><br><span class="line">        //y数组存储的是按照第二关键字从小到大排序后的后缀的起始下标 </span><br><span class="line">        //i从大到小枚举即可保证按照第一关键字排序后依然是按照第二关键字排序后的相对顺序不变 </span><br><span class="line">        for(int i = n; i; i --) sa[c[x[y[i]]] --] = y[i], y[i] = 0;</span><br><span class="line">        swap(x, y);</span><br><span class="line">         //将所有后缀离散化 </span><br><span class="line">        x[sa[1]] = 1, num = 1;</span><br><span class="line">        //此时y存储的是从i开始的后缀的第一关键字 </span><br><span class="line">        for(int i = 2;i &lt;= n;i ++) //若当前后缀和排名前一位的后缀第一关键字和第二关键字相同则离散化后的数值相同，否则+1 </span><br><span class="line">            x[sa[i]] = (y[sa[i]] == y[sa[i - 1]] &amp;&amp; y[sa[i] + k] == y[sa[i - 1] + k]) ? num : ++ num;</span><br><span class="line">        if(num == n) break;</span><br><span class="line">        m = num;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">void get_height()&#123;</span><br><span class="line">    for(int i = 1;i &lt;= n;i ++) rk[sa[i]] = i;</span><br><span class="line">    for(int i =  1, k = 0;i &lt;= n;i ++)&#123;</span><br><span class="line">        if(rk[i] == 1) continue;</span><br><span class="line">        if(k) k --;</span><br><span class="line">        //j为排名前一位的起始下标 </span><br><span class="line">        int j = sa[rk[i] - 1];</span><br><span class="line">        while(i + k &lt;= n &amp;&amp; j + k &lt;= n &amp;&amp; s[i + k] == s[j + k]) k ++;</span><br><span class="line">        //求最长相同前缀 </span><br><span class="line">        height[rk[i]] = k;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -412,12 +412,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">42k</span>
+    <span title="站点总字数">44k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">38 分钟</span>
+    <span title="站点阅读时长">40 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
